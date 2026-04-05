@@ -1,0 +1,49 @@
+{
+  "name": "mediamatrix",
+  "version": "2.3.8",
+  "description": "Plugin manager for MediaMatrix",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.0.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1"
+  },
+"build": {
+  "appId": "com.mediamatrix.app",
+  "productName": "MediaMatrix",
+  "directories": {
+    "output": "dist"
+  },
+  "files": [
+    "main.js",
+    "preload.js"
+  ],
+"extraResources": [
+  "engine/**/*",
+  "component/**/*",
+  "index.html",
+  "styles.css"
+],
+  "asar": false,
+  "win": {
+    "target": "nsis",
+    "icon": "build/icon.ico"
+  },
+  "nsis": {
+    "oneClick": false,
+    "perMachine": true,
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": true,
+    "license": "license.txt"
+  }
+}
+}

@@ -1,0 +1,70 @@
+ /)/)
+( . .)
+( づMediaMatrix   
+
+LICENSE AGREEMENT
+for the use of the computer program [MediaMatrix]
+
+ Read this License Agreement (hereinafter referred to as the "Agreement") carefully before you start using the program [MediaMatrix] (hereinafter referred to as the "Program"). Installing, running, or otherwise starting to use the Program means your full and unconditional acceptance of the terms of this Agreement. If you do not accept the terms of the Agreement in full, you do not have the right to install or use the Program.
+
+1. Terms and Definitions
+
+1.1. The Program is the [MediaMatrix] computer software presented in the form of an installation or portable distribution, including all its components, interfaces, user documentation, and any updates and new versions provided by the Copyright Holder.
+1.2. The Copyright Holder is [MediaMatrix], which owns the exclusive rights to the Program. Contact information: [Specify the website or email address].
+1.3. The User is any individual or legal entity that installs, copies, or otherwise uses the Program in accordance with the terms of this Agreement.
+1.4. Use (Application) - any actions related to the functioning of the Program in accordance with its purpose, including recording in the memory of the EPU (installation), loading, starting, displaying the interface, as well as the playback of its functionality.
+1.5. Third-party plugins - independently created software modules that are not included in the official distribution of the Program, which are designed to expand or modify its functionality.
+
+2. General Provisions
+
+2.1. This Agreement is a legally binding agreement between the User and the Copyright Holder regarding the use of the Program.
+2.2. The Program is the result of intellectual activity and is protected by copyright law and international conventions. All rights to the Program, including but not limited to the source code, design, structure, and organization, belong to the Copyright Holder.
+2.3. The Program is provided to the User on an "as is" basis in accordance with the provisions of Section 6 of this Agreement.
+
+3. Granting Rights (License)
+
+3.1. The Rightholder grants the User a non-exclusive, non-transferable (except as expressly provided for in clause 4.1), irrevocable (until the Agreement is terminated in accordance with Section 8) license to use the Software within the limits and under the conditions set forth in this Agreement.
+3.2. The License is granted free of charge.
+3.3. Permitted ways of use:
+3.3.1. Install and run the Program on an unlimited number of devices (computers, laptops, etc.) owned by the User, provided that the Program is used exclusively for personal (private) or non-commercial purposes.
+3.3.2. Play (copy) the Program for the purposes of installation and/or backup, provided that such copying is not the main way of using the Program and is carried out to preserve its functionality.
+3.3.3. Use Third-party plugins connected to the Program, provided that such plugins do not violate the legislation and rights of third parties, and their use does not contradict the restrictions set in Section 4.
+
+4. Restrictions (Prohibitions)
+
+4.1. The User is prohibited from:
+4.1.1. To sell, lease, rent, provide for temporary use, or otherwise distribute the Program, its copies, or modified versions to third parties for a fee or without a fee, without obtaining prior written permission from the Rightholder.
+4.1.2. To profit from the use of the Program, unless otherwise expressly authorized in writing by the Rightholder. Profiting is understood as any commercial use, including but not limited to: use for providing paid services, in-app purchases (in-app purchases) without approval, advertising placement in the Program, integration of the Program into a commercial product.
+4.1.3. To impersonate the developer of the Program, to delete, hide or modify any copyright information, trademarks or licensing notices contained in the Program or its distribution.
+4.1.4. Decompile, disassemble, reverse-engineer (reverse-develop) the source code of the Program, as well as attempt to learn the source code of the Program in any other way, except as permitted by applicable law.
+4.1.5. Make any changes to the source code of the Program, create derivative works based on it, modify or process the Program.
+4.1.6. Use the Program in ways not provided for by this Agreement or for purposes contrary to the law.
+
+5. Third-party plugins
+
+5.1. The Program may support integration with Third-party plugins. The copyright holder is not responsible for the functionality, security, content, and any consequences of using such plugins.
+5.2. The use of Third-party plugins is subject to the terms of their own developers. The copyright holder does not provide any guarantees regarding their compatibility with the Program.
+
+6. Disclaimer and Limitation of Liability
+
+6.1. THE PROGRAM IS PROVIDED ON AN "AS IS" BASIS. THE COPYRIGHT HOLDER MAKES NO WARRANTIES, EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-ERROR.
+6.2. THE COPYRIGHT HOLDER DOES NOT GUARANTEE THAT THE PROGRAM WILL WORK SMOOTHLY, ERROR-FREE, OR THAT ALL DEFECTS WILL BE CORRECTED.
+6.3. UNDER NO CIRCUMSTANCES WILL THE COPYRIGHT HOLDER BE LIABLE TO THE USER OR THIRD PARTIES FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, LOSS OF DATA, PROFITS, BUSINESS REPUTATION OR WORK INTERRUPTIONS) RESULTING FROM THE USE OR INABILITY TO USE THE PROGRAM, EVEN IF THE COPYRIGHT HOLDER HAS BEEN NOTIFIED OF THE POSSIBILITY OF SUCH DAMAGE. This restriction does not apply in cases where the damage is caused intentionally or as a result of the Rightholder's gross negligence, if such liability cannot be excluded under the law.
+
+7. Changes to the Terms of the Agreement
+
+7.1. The Rightholder reserves the right to unilaterally make changes to this Agreement. The current version of the Agreement is always available on the Official Website of the Rightholder at: [Provide a link].
+7.2. Continued use of the Program by the User after the publication of changes means the User's full agreement with the new edition of the Agreement. If the User does not agree with the changes, he is obliged to stop using the Program and delete all copies of it.
+
+8. Term of validity and termination of the Agreement
+8.1. This Agreement comes into force from the moment the User starts using the Program and is valid indefinitely.
+8.2. The Rightholder has the right to terminate (cancel) this Agreement unilaterally without prior notice to the User in the event that the User violates the conditions set forth in Section 4.
+8.3. In the event that the Agreement is terminated for any reason, the User must immediately stop using the Program and delete all copies of the Program from their devices.
+
+9. Final Provisions
+
+9.1. This Agreement is governed by and construed in accordance with the laws of [Specify the country, such as the Russian Federation].
+9.2. If any provision of this Agreement is found to be invalid or unenforceable, this shall not affect the validity of the remaining provisions.
+9.3. For all questions related to the execution of this Agreement, the User may contact the Rightholder at: [Specify the contact email].
+
+ © 2026 MediaMatrix. All rights reserved.

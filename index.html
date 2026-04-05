@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediaMatrix</title>
+    <link rel="icon" href="icon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Custom Title Bar (Electron) -->
+    <div class="titlebar">
+        <div class="titlebar-drag-region">MediaMatrix</div>
+        <div class="titlebar-controls">
+            <button id="reload-btn" class="titlebar-btn" title="Обновить">
+                <svg class="titlebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M23 4v6h-6M1 20v-6h6"/>
+                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                </svg>
+            </button>
+            <button id="minimize-btn" class="titlebar-btn" title="Свернуть">
+                <svg class="titlebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 12H4"/>
+                </svg>
+            </button>
+            <button id="maximize-btn" class="titlebar-btn" title="Развернуть">
+                <svg class="titlebar-icon maximize-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 4h16v16H4z"/>
+                </svg>
+                <svg class="titlebar-icon restore-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+                    <path d="M4 8h12v12H4z"/>
+                    <path d="M8 4h12v12"/>
+                </svg>
+            </button>
+            <button id="close-btn" class="titlebar-btn close" title="Закрыть">
+                <svg class="titlebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Верхняя панель управления -->
+   <div class="top-panel">
+    <div class="top-panel-left"> 
+        <button  id="home-btn" class="top-panel-btn" title="Home">
+            <i class="fas fa-home"></i>
+        </button>
+        <button id="menu-toggle-panel" class="top-panel-btn" title="Меню">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+    <div class="top-panel-right">
+        <div id="datetime" class="datetime">—</div>
+        <button id="panel-settings-btn" class="top-panel-btn" title="Настройки">
+            <i class="fas fa-cog"></i>
+        </button>
+        <button id="panel-plugins-btn" class="top-panel-btn" title="Плагины">
+            <i class="fas fa-plug"></i>
+        </button>
+        <button id="panel-store-btn" class="top-panel-btn" title="Магазин">
+            <i class="fas fa-store"></i>
+        </button>
+        <div class="notifications-wrapper">
+            <button id="panel-notifications-btn" class="top-panel-btn" title="Уведомления">
+                <i class="fas fa-bell"></i>
+                <span id="notification-badge" class="notification-badge hidden">0</span>
+            </button>
+            <div id="notifications-dropdown" class="notifications-dropdown card hidden">
+                <div class="notifications-header">
+                    <h4>Уведомления</h4>
+                    <button id="clear-notifications" class="btn btn-outline btn-sm">Очистить</button>
+                </div>
+                <div id="notifications-list" class="notifications-list"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sidebar -->
+<aside id="sidebar" class="sidebar"> 
+    <div class="sidebar-header" style="display: none;">
+        <div class="sidebar-logo">
+            <i class="fas fa-puzzle-piece"></i>
+        </div>
+        <h1 class="sidebar-title">MediaMatrix</h1>
+    </div>
+
+    <nav class="sidebar-nav">
+        <a href="#" class="sidebar-link active" data-page="home">
+            <i class="fas fa-home"></i>
+            <span>Главная</span>
+        </a>
+        <a href="#" class="sidebar-link" data-page="store">
+            <i class="fas fa-store"></i>
+            <span>Магазин</span>
+        </a>
+        <a href="#" class="sidebar-link" data-page="plugins">
+            <i class="fas fa-plug"></i>
+            <span>Плагины</span>
+        </a>
+        <a href="#" class="sidebar-link" data-page="settings">
+            <i class="fas fa-cog"></i>
+            <span>Настройки</span>
+        </a>
+    </nav>
+</aside>
+    <!-- Overlay for mobile -->
+    <div id="overlay" class="overlay"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+       <!-- Home Page -->
+         <!-- Карусель плагинов -->
+    <div class="plugins-carousel-section">
+        <div class="carousel-header">
+            <h1 class="section-title">
+                Мои приложения
+            </h1>
+            <div class="carousel-controls">
+                <button class="carousel-btn prev-btn" id="pluginsPrevBtn" disabled>
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="carousel-btn next-btn" id="pluginsNextBtn">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="carousel-container" id="pluginsCarouselContainer">
+            <div class="carousel-track" id="pluginsCarouselTrack">
+                <!-- Карточки будут добавляться сюда динамически -->
+            </div>
+        </div>
+        
+        <!-- Индикаторы -->
+        <div class="carousel-indicators" id="carouselIndicators"></div>
+    </br>
+    <!-- Сообщение, если плагинов нет -->
+        <div id="carouselNoPlugins" class="carousel-no-plugins hidden">
+            <div class="no-plugins-content">
+                <i class="fas fa-puzzle-piece"></i>
+                <h4>Ещё нет плагинов</h4>
+                <p>Установите плагины из магазина</p>
+                <button onclick="navigateTo('store')" class="btn btn-primary">
+                    <i class="fas fa-store"></i> Перейти в магазин
+                </button>
+            </div>
+        </div>
+    </div>
+<section id="home" class="page active animate-slide">
+    <div class="home-widgets">
+        <!-- Stats Grid и быстрые действия -->
+         <div class="stats-grid">
+
+         </div>
+    </div>
+</section>
+
+        <!-- Store Page (полностью сохранена) -->
+        <section id="store" class="page">
+            <div class="store-header">
+                <div>
+                    <h2 class="page-title">Магазин плагинов</h2>
+                    <p class="page-subtitle" style="margin-bottom: 0;">Устанавливайте плагины из официального репозитория</p>
+                </div>
+                <button onclick="refreshStore()" class="btn btn-outline" id="refreshStoreBtn">
+                    <i class="fas fa-sync-alt"></i>Обновить
+                </button>
+            </div>
+
+            <!-- Search and Filter -->
+            <div class="store-search-section">
+                <div class="store-search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="storeSearchInput" class="form-input" placeholder="Поиск плагинов..." oninput="filterStorePlugins()">
+                </div>
+                <div class="store-filters">
+                    <select id="categoryFilter" class="form-input" onchange="filterStorePlugins()">
+                        <option value="all">Все категории</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Store Loading -->
+            <div id="storeLoading" class="store-loading">
+                <div class="loading-spinner"></div>
+                <p>Загрузка плагинов из магазина...</p>
+            </div>
+
+            <!-- Store Error -->
+            <div id="storeError" class="store-error hidden">
+                <i class="fas fa-exclamation-circle"></i>
+                <h3>Не удалось загрузить магазин</h3>
+                <p id="storeErrorMessage">Проверьте подключение к интернету</p>
+                <button onclick="refreshStore()" class="btn btn-primary">
+                    <i class="fas fa-sync-alt"></i>Повторить
+                </button>
+            </div>
+
+            <!-- Store Grid -->
+            <div id="storeGrid" class="store-grid hidden">
+                <!-- Store plugins will be rendered here -->
+            </div>
+
+            <!-- No Results -->
+            <div id="storeNoResults" class="store-no-results hidden">
+                <i class="fas fa-search"></i>
+                <h3>Ничего не найдено</h3>
+                <p>Попробуйте изменить параметры поиска</p>
+            </div>
+        </section>
+
+        <!-- Plugins Page (полностью сохранена) -->
+        <section id="plugins" class="page">
+            <div class="plugins-header">
+                <div>
+                    <h2 class="page-title">Плагины</h2>
+                    <p class="page-subtitle" style="margin-bottom: 0;">Установка и управление плагинами</p>
+                </div>
+                <div class="plugins-actions">
+                    <button onclick="openInstallModal()" class="btn btn-primary">
+                        <i class="fas fa-upload"></i>Установить
+                    </button>
+                    <button onclick="navigateTo('store')" class="btn btn-outline">
+                        <i class="fas fa-store"></i>Магазин
+                    </button>
+                </div>
+            </div>
+
+                    <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="card stat-card">
+                <div class="stat-icon indigo">
+                    <i class="fas fa-plug"></i>
+                </div>
+                <h3 class="stat-title">Установленные плагины</h3>
+                <p class="stat-value" id="pluginCount">0</p>
+            </div>
+
+            <div class="card stat-card">
+                <div class="stat-icon green">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h3 class="stat-title">Активные</h3>
+                <p class="stat-value green" id="activeCount">0</p>
+            </div>
+
+            <div class="card stat-card">
+                <div class="stat-icon blue">
+                    <i class="fas fa-store"></i>
+                </div>
+                <h3 class="stat-title">Доступно в магазине</h3>
+                <p class="stat-value" id="storeCount">0</p>
+            </div>
+        </div>
+
+            <div id="pluginsList" class="plugins-grid">
+                <!-- Plugins will be rendered here -->
+            </div>
+
+            <div id="noPlugins" class="card no-plugins hidden">
+                <i class="fas fa-puzzle-piece"></i>
+                <h3>Нет установленных плагинов</h3>
+                <p>Установите ваш первый плагин из магазина или загрузите файл</p>
+                <div class="btn-group">
+                    <button onclick="navigateTo('store')" class="btn btn-primary">
+                        <i class="fas fa-store"></i>Открыть магазин
+                    </button>
+                    <button onclick="openInstallModal()" class="btn btn-outline">
+                        <i class="fas fa-upload"></i>Установить из файла
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Settings Page (добавлен новый блок для панели) -->
+        <section id="settings" class="page">
+            <h2 class="page-title">Настройки</h2>
+            <p class="page-subtitle">Персонализация приложения</p>
+
+            <!-- Блок темы (без изменений) -->
+            <div class="card settings-section" style="padding: 24px; margin-bottom: 24px;">
+                <h3><i class="fas fa-palette"></i> Тема оформления</h3>
+                <div class="themes-container">
+                    <div class="theme-item">
+                        <div class="theme-preview selected" data-theme="light" style="background: linear-gradient(135deg, #f8fafc, #e2e8f0);" onclick="setTheme('light')"></div>
+                        <span class="theme-label">Светлая</span>
+                    </div>
+                    <div class="theme-item">
+                        <div class="theme-preview" data-theme="dark" style="background: linear-gradient(135deg, #1e293b, #0f172a);" onclick="setTheme('dark')"></div>
+                        <span class="theme-label">Тёмная</span>
+                    </div>
+                    <div class="theme-item">
+                        <div class="theme-preview" data-theme="ocean" style="background: linear-gradient(135deg, #0ea5e9, #0369a1);" onclick="setTheme('ocean')"></div>
+                        <span class="theme-label">Океан</span>
+                    </div>
+                    <div class="theme-item">
+                        <div class="theme-preview" data-theme="forest" style="background: linear-gradient(135deg, #22c55e, #166534);" onclick="setTheme('forest')"></div>
+                        <span class="theme-label">Лес</span>
+                    </div>
+                    <div class="theme-item">
+                        <div class="theme-preview" data-theme="sunset" style="background: linear-gradient(135deg, #f59e0b, #ea580c);" onclick="setTheme('sunset')"></div>
+                        <span class="theme-label">Закат</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Настройки сервера -->
+<div class="card settings-section" style="padding: 24px; margin-bottom: 24px;">
+    <h3><i class="fas fa-server"></i> Настройки сервера (для разработчиков)</h3>
+    <p class="settings-description">Изменения требуют перезапуска приложения. Это настройки безопасности приложения. Если вы не знаете, за что они отвечают, оставьте их как есть.</p>
+    <div class="settings-list">
+        <div class="settings-item">
+            <div class="settings-item-info">
+                <p>Порт</p>
+                <span>Порт для локального сервера (1024–65535)</span>
+            </div>
+            <input type="number" id="serverPort" class="form-input" style="width: 120px;" min="1024" max="65535" value="3000">
+        </div>
+
+        <!-- Ссылка на localhost -->
+        <div class="settings-item" style="flex-direction: column; align-items: stretch; padding: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span class="settings-item-info" style="padding:0;"><p>Адрес сервера:</p><span>Вы можете скопировать ссылку и открыть в браузере</span></span>
+                 <button class="btn btn-outline btn-sm" onclick="copyLocalhostUrl()">
+                    <i class="fas fa-copy"></i> Копировать
+                </button>
+            </div>
+            <div class="url-input-group" style="width: 100%;">
+                <input type="text" id="localhostLink" class="form-input" readonly value="http://localhost:3000" onclick="this.select()">
+            </div>
+        </div>
+
+
+        <div class="settings-item">
+            <div class="settings-item-info">
+                <p>Включить CORS</p>
+                <span>Разрешить кросс-доменные запросы к серверу</span>
+            </div>
+            <div class="toggle-switch" id="serverCorsToggle"></div>
+        </div>
+
+        <div class="settings-item">
+            <div class="settings-item-info">
+                <p>Включить webSecurity</p>
+                <span>Включить политику same‑origin в окне (отключите для совместимости с плагинами)</span>
+            </div>
+            <div class="toggle-switch" id="serverWebSecurityToggle"></div>
+        </div>
+
+        <div class="settings-item" style="justify-content: flex-start; gap: 12px; flex-wrap: wrap;">
+            <button onclick="saveServerConfig()" class="btn btn-primary">
+                <i class="fas fa-save"></i> Сохранить настройки
+            </button>
+            <button onclick="relaunchApp()" class="btn btn-outline">
+                <i class="fas fa-redo-alt"></i> Перезапустить приложение
+            </button>
+        </div>
+    </div>
+</div>
+
+            <!-- Настройки верхней панели -->
+            <div class="card settings-section" style="padding: 24px; margin-bottom: 24px;">
+                <h3><i class="fas fa-window-maximize"></i> Верхняя панель</h3>
+                <div class="settings-list">
+                    <div class="settings-item">
+                        <div class="settings-item-info">
+                            <p>Показывать часы</p>
+                            <span>Отображать дату и время справа</span>
+                        </div>
+                        <div class="toggle-switch" id="panelClockToggle"></div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-item-info">
+                            <p>Иконка «Настройки»</p>
+                            <span>Быстрый переход к настройкам</span>
+                        </div>
+                        <div class="toggle-switch" id="panelSettingsIconToggle"></div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-item-info">
+                            <p>Иконка «Плагины»</p>
+                            <span>Быстрый переход к плагинам</span>
+                        </div>
+                        <div class="toggle-switch" id="panelPluginsIconToggle"></div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-item-info">
+                            <p>Иконка «Магазин»</p>
+                            <span>Быстрый переход в магазин</span>
+                        </div>
+                        <div class="toggle-switch" id="panelStoreIconToggle"></div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-item-info">
+                            <p>Иконка уведомлений</p>
+                            <span>Показывать колокольчик и историю</span>
+                        </div>
+                        <div class="toggle-switch" id="panelNotificationsIconToggle"></div>
+                    </div>
+                </div>
+            </div>
+
+           <!-- Настройки меню -->
+<div class="card settings-section" style="padding: 24px; margin-bottom: 24px;">
+    <h3><i class="fas fa-bars"></i> Настройки меню</h3>
+    <p class="settings-description">Перетаскивайте пункты меню чтобы изменить их порядок</p>
+    
+    <div class="menu-settings-container">
+        <div class="menu-items-list" id="menuItemsList">
+            <!-- Пункты меню будут загружаться сюда -->
+        </div>
+        
+        <div class="menu-settings-actions">
+            <button onclick="resetMenuOrder()" class="btn btn-outline btn-sm">
+                <i class="fas fa-undo"></i> Сбросить порядок
+            </button>
+            <button onclick="saveMenuOrder()" class="btn btn-primary btn-sm">
+                <i class="fas fa-save"></i> Сохранить порядок
+            </button>
+        </div>
+    </div>
+</div>
+            
+            <!-- Блок настроек магазина -->
+            <div class="card settings-section" style="padding: 24px; margin-bottom: 24px;">
+                <h3><i class="fas fa-store"></i> Настройки магазина</h3>
+                <div class="settings-list">
+                    <div class="settings-item">
+                        <div class="settings-item-info">
+                            <p>Автоматическая проверка обновлений</p>
+                            <span>Проверять наличие обновлений плагинов</span>
+                        </div>
+                        <div class="toggle-switch" id="autoUpdateToggle"></div>
+                    </div>
+                    
+                    <div class="settings-item" style="flex-direction: column; align-items: stretch; padding: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <div class="settings-item-info">
+                                <p>URL магазина плагинов</p>
+                                <span>Адрес файла со списком плагинов</span>
+                            </div>
+                            <div class="btn-group" style="gap: 8px;">
+                                <button onclick="resetStoreUrl()" class="btn btn-outline btn-sm">
+                                    <i class="fas fa-undo"></i> Сброс
+                                </button>
+                                <button onclick="saveStoreUrl()" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-save"></i> Сохранить
+                                </button>
+                            </div>
+                        </div>
+                        <div class="url-input-group" style="width: 100%;">
+                            <input type="url" id="storeUrlInput" class="form-input" 
+                                   placeholder="https://example.com/store.json">
+                        </div>
+                    </div>
+                    
+                    <div class="settings-item">
+                        <button onclick="manualCheckForUpdates()" class="btn btn-outline" style="width: 100%;">
+                            <i class="fas fa-sync-alt"></i> Проверить обновления сейчас
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Блок общих настроек -->
+            <div class="card settings-section" style="padding: 24px; margin-bottom: 24px;">
+                <h3><i class="fas fa-sliders-h"></i> Общие настройки</h3>
+                <div class="settings-list">
+                    <!-- Показывать карусель плагинов -->
+        <div class="settings-item">
+            <div class="settings-item-info">
+                <p>Показывать меню плагинов</p>
+                <span>Отображение раздела с плагинами на главной</span>
+            </div>
+            <div class="toggle-switch" id="showCarouselToggle"></div>
+        </div>
+                    <div class="settings-item">
+                        <div class="settings-item-info">
+                            <p>Уведомления</p>
+                            <span>Показывать уведомления о событиях</span>
+                        </div>
+                        <div class="toggle-switch" id="notificationsToggle"></div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-item-info">
+                            <p>Автозапуск плагинов</p>
+                            <span>Запускать плагины при загрузке</span>
+                        </div>
+                        <div class="toggle-switch" id="autoStartToggle"></div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="settings-item-info">
+                            <p>Сохранять логи</p>
+                            <span>Хранить логи работы плагинов</span>
+                        </div>
+                        <div class="toggle-switch" id="saveLogsToggle"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Блок данных -->
+            <div class="card settings-section" style="padding: 24px;">
+                <h3><i class="fas fa-database"></i> Данные</h3>
+                <div class="btn-group">
+                    <button onclick="exportData()" class="btn btn-outline">
+                        <i class="fas fa-download"></i> Экспорт данных
+                    </button>
+                    <button onclick="document.getElementById('importFile').click()" class="btn btn-outline">
+                        <i class="fas fa-upload"></i> Импорт данных
+                    </button>
+                    <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData(event)">
+                    <button onclick="clearAllData()" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Очистить всё
+                    </button>
+                </div>
+            </div>
+
+            <div class="card settings-section" style="padding: 24px;">
+                <h3><i class="fa fa-info-circle"></i> О приложении <b>v2.3.8</b></h3>
+       <div class="settings-item-info">
+            <p>&nbsp;/) /) ✉ <b>mediamatrix.helpdesk@mail.ru</p>
+            <p>( • ༝•) © 2026 MediaMatrix</p>
+            </div>
+        </div>
+        </section>
+    </main>
+
+    <!-- Plugin Detail Modal -->
+    <div id="pluginDetailModal" class="modal">
+        <div class="card modal-content modal-content-lg">
+            <div class="modal-header">
+                <h3 id="pluginDetailTitle">Информация о плагине</h3>
+                <button onclick="closePluginDetail()" class="modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="pluginDetailContent">
+                <!-- Plugin detail will be rendered here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Install Plugin Modal -->
+    <div id="installModal" class="modal">
+        <div class="card modal-content">
+            <div class="modal-header">
+                <h3>Установить плагин</h3>
+                <button onclick="closeInstallModal()" class="modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Tabs -->
+                <div class="install-tabs">
+                    <button class="install-tab active" data-tab="file" onclick="switchInstallTab('file')">
+                        <i class="fas fa-file-code"></i>Файл
+                    </button>
+                    <button class="install-tab" data-tab="url" onclick="switchInstallTab('url')">
+                        <i class="fas fa-link"></i>Ссылка
+                    </button>
+                    <button class="install-tab" data-tab="code" onclick="switchInstallTab('code')">
+                        <i class="fas fa-code"></i>Код
+                    </button>
+                </div>
+
+                <!-- File Tab -->
+                <div id="tabFile" class="install-tab-content active">
+                    <div class="form-group">
+                        <label class="form-label">JavaScript файл</label>
+                        <div class="file-upload" onclick="document.getElementById('pluginFile').click()">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Нажмите для выбора .js файла</p>
+                            <p class="filename" id="selectedFileName">Файл не выбран</p>
+                        </div>
+                        <input type="file" id="pluginFile" accept=".js" style="display: none;" onchange="handleFileSelect(event)">
+                    </div>
+                    <div class="plugin-meta-preview" id="fileMetaPreview"></div>
+                </div>
+
+                <!-- URL Tab -->
+                <div id="tabUrl" class="install-tab-content">
+                    <div class="form-group">
+                        <label class="form-label">Ссылка на плагин (.js)</label>
+                        <div class="url-input-group">
+                            <input type="url" id="pluginUrl" class="form-input" placeholder="https://example.com/plugin.js">
+                            <button onclick="loadPluginFromUrl()" class="btn btn-outline">
+                                <i class="fas fa-download"></i>Загрузить
+                            </button>
+                        </div>
+                    </div>
+                    <div class="plugin-meta-preview" id="urlMetaPreview"></div>
+                </div>
+
+                <!-- Code Tab -->
+                <div id="tabCode" class="install-tab-content">
+                    <div class="form-group">
+                        <label class="form-label">Вставьте код плагина:</label>
+                        <textarea id="pluginCode" class="form-textarea code" rows="8" placeholder="/**\n * @name Название плагина\n * @version 1.0.0\n * @description Описание плагина\n */\n\n(function() {\n    // Код плагина...\n})();"></textarea>
+                    </div>
+                    <button onclick="parseCodeMeta()" class="btn btn-outline" style="margin-bottom: 16px;">
+                        <i class="fas fa-sync"></i>Распознать метаданные
+                    </button>
+                    <div class="plugin-meta-preview" id="codeMetaPreview"></div>
+                </div>
+
+                <!-- Manual Override (optional) -->
+                <div class="manual-override">
+                    <div class="manual-override-header" onclick="toggleManualOverride()">
+                        <span><i class="fas fa-edit"></i>Ручной ввод данных (опционально)</span>
+                        <i class="fas fa-chevron-down" id="manualOverrideArrow"></i>
+                    </div>
+                    <div class="manual-override-content" id="manualOverrideContent">
+                        <div class="form-group">
+                            <label class="form-label">Название плагина</label>
+                            <input type="text" id="pluginName" class="form-input" placeholder="Автоматически из метаданных">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Описание</label>
+                            <textarea id="pluginDesc" class="form-textarea" rows="2" placeholder="Автоматически из метаданных"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Версия</label>
+                            <input type="text" id="pluginVersion" class="form-input" placeholder="Автоматически из метаданных">
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="installPlugin()" class="btn btn-primary" style="width: 100%; margin-top: 16px;">
+                    <i class="fas fa-download"></i>Установить плагин
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Plugin Settings Modal -->
+    <div id="pluginSettingsModal" class="modal">
+        <div class="card modal-content modal-content-lg">
+            <div class="modal-header">
+                <h3 id="pluginSettingsTitle">Настройки плагина</h3>
+                <button onclick="closePluginSettings()" class="modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="pluginSettingsContent">
+                <!-- Plugin settings will be rendered here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification">
+        <div class="card notification-content">
+            <i id="notificationIcon" class="fas fa-check-circle success"></i>
+            <span id="notificationText">Уведомление</span>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteConfirmModal" class="modal delete-confirm-modal">
+        <div class="card modal-content delete-confirm-content">
+            <div class="delete-confirm-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h3 class="delete-confirm-title">Удалить плагин?</h3>
+            <p class="delete-confirm-text">Вы уверены, что хотите удалить плагин <strong id="deletePluginName"></strong>?</p>
+            <p class="delete-confirm-warning">Это действие нельзя отменить. Все данные плагина будут потеряны.</p>
+            <div class="delete-confirm-buttons">
+                <button onclick="closeDeleteConfirm()" class="btn btn-outline">
+                    <i class="fas fa-times"></i> Отмена
+                </button>
+                <button onclick="confirmDeletePlugin()" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Удалить
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Подключаем модули JavaScript в правильном порядке -->
+    <script src="engine/utils.js"></script>
+    <script src="engine/state.js"></script>
+    <script src="engine/notifications.js"></script>
+    <script src="engine/settings.js"></script>
+    <script src="engine/plugins.js"></script>
+    <script src="engine/ui.js"></script>
+    <script src="engine/navigation.js"></script>
+    <script src="engine/electron.js"></script>
+    <script src="engine/main.js"></script>
+    <script src="component/carousel.js"></script>
+    <script src="component/store.js"></script>
+    <script src="component/menu-settings.js"></script>
+</body>
+</html>
